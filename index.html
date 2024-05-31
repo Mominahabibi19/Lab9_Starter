@@ -69,20 +69,20 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
+      <button id="console-log">Console Log</button>
+      <button id="console-error">Console Error</button>
+      <button id="console-count">Console Count</button>
+      <button id="console-warn">Console Warn</button>
+      <button id="console-assert">Console Assert</button>
+      <button id="console-clear">Console Clear</button>
+      <button id="console-dir">Console Dir</button>
+      <button id="console-dirxml">Console dirxml</button>
+      <button id="console-group-start">Console Group Start</button>
+      <button id="console-group-end">Console Group End</button>
+      <button id="console-table">Console Table</button>
+      <button id="start-timer">Start Timer</button>
+      <button id="end-timer">End Timer</button>
+      <button id="console-trace">Console Trace</button>
       <button>Trigger a Global Error</button>
     </section>
   </main>
@@ -100,8 +100,95 @@
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
+
     // Start your code here
     // You may move this JS to another file if you wish
+    //step 2
+    document.querySelector('#console-log').addEventListener('click', function() {
+      console.log("Console Log Demo");
+    });
+
+    document.querySelector('#console-error').addEventListener('click', function() {
+      console.error("Console Error Demo");
+    });
+
+    document.querySelector('#console-count').addEventListener('click', function() {
+      console.count("Count Button");
+    });
+
+    document.querySelector('#console-warn').addEventListener('click', function() {
+      console.warn("Console Warn Button");
+    });
+
+    document.querySelector('#console-assert').addEventListener('click', function() {
+      let number = 2;
+      console.assert(number === 3, `\n{number: ${number}, errorMsg: 'The number does not equal 3'}`);
+    });
+
+    document.querySelector('#console-clear').addEventListener('click', function() {
+      console.clear();
+    });
+
+    document.querySelector('#console-dir').addEventListener('click', function() {
+      console.dir(document.body);
+    });
+
+    document.querySelector('#console-dirxml').addEventListener('click', function() {
+      console.dirxml(document.querySelector('#console-dirxml'));
+    });
+
+    document.querySelector('#console-group-start').addEventListener('click', function() {
+      console.group();
+    });
+
+    document.querySelector('#console-group-end').addEventListener('click', function() {
+      console.groupEnd();
+    });
+
+    document.querySelector('#console-table').addEventListener('click', function() {
+      console.table([
+        { name: 'Software Engineering', num: 110 },
+        { name: 'Programming Language', num: 130 },
+        { name: 'Advanced SWE', num: 112 }
+      ]);
+    });
+
+    document.querySelector('#start-timer').addEventListener('click', function() {
+      console.time('Timer Button');
+    });
+
+    document.querySelector('#end-timer').addEventListener('click', function() {
+      console.timeEnd('Timer Button');
+    });
+
+    function deepestFunction() {
+      console.trace();
+    }
+    function deeperFunction() {
+      deepestFunction();
+    }
+    function deepFunction() {
+      deeperFunction();
+    }
+    function handleBtnClick() {
+      deepFunction();
+    }
+    document.querySelector('#console-trace').addEventListener('click', function() {
+      handleBtnClick();
+    });
+
+    //step 3
+    //try/catch/finally/throw
+    
+    //step 4
+    //throw and custom error
+    
+
+
+    //step 5
+    //global error handler and 3rd party tracking
+
+    
   </script>
 </body>
 
