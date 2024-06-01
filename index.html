@@ -176,10 +176,27 @@
     document.querySelector('#console-trace').addEventListener('click', function() {
       handleBtnClick();
     });
-
     //step 3
     //try/catch/finally/throw
+    document.querySelector('#console-table').addEventListener('click', function() {
+      try {
+        let tableData = [
+          { name: 'Software Engineering', num: 110 },
+          { name: 'Programming Language', num: 130 },
+          { name: 'Advanced SWE', num: abc }
+        ];
+        if (!tableData.every(item => item.num && typeof item.num === 'number')) {
+          throw new Error('Each item must have a name and a number');
+        }
+        console.table(tableData);
+      } catch (error) {
+        console.error('error displaying table data: ', error);
+      } finally {
+        console.log('Table data displayed');
+      }
+    });
     
+
 
     
   </script>
