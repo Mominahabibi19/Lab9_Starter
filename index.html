@@ -83,12 +83,18 @@
       <button id="start-timer">Start Timer</button>
       <button id="end-timer">End Timer</button>
       <button id="console-trace">Console Trace</button>
-      <button id="custom-error">Custom Error</button>
       <button id="global-error">Trigger a Global Error</button>
     </section>
   </main>
 
   <script>
+    class CustomError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "CustomError";
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -96,15 +102,20 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      try {
+        if (isNaN(firstNum) || isNaN(secondNum)) {
+          throw new CustomError("Inputs must be valid numbers.");
+        }
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch (error) {
+        output.innerHTML = `Error: ${error.message}`;
+        console.error("Caught an error: ", error);
+      } finally {
+        console.log("Calculation attempted.");
+      }
     });
 
-    let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
-
-
-    // Start your code here
-    // You may move this JS to another file if you wish
-    // Step 2 - Console Testing Buttons
     document.querySelector('#console-log').addEventListener('click', function() {
       console.log("Console Log Demo");
     });
@@ -165,74 +176,51 @@
     function deepestFunction() {
       console.trace();
     }
+
     function deeperFunction() {
       deepestFunction();
     }
+
     function deepFunction() {
       deeperFunction();
     }
+
     function handleBtnClick() {
       deepFunction();
     }
+
     document.querySelector('#console-trace').addEventListener('click', function() {
       handleBtnClick();
     });
 
-    // Step 3 - Try/Catch/Finally/Throw
-    document.querySelector('#console-table').addEventListener('click', function() {
-      try {
-        let tableData = [
-          { name: 'Software Engineering', num: 110 },
-          { name: 'Programming Language', num: 130 },
-          { name: 'Advanced SWE', num: abc }
-        ];
-        if (!tableData.every(item => item.num && typeof item.num === 'number')) {
-          throw new Error('Each item must have a name and a number');
-        }
-        console.table(tableData);
-      } catch (error) {
-        console.error('error displaying table data: ', error);
-      } finally {
-        console.log('Table data displayed');
-      }
-    });
-
-    // Step 4 - Custom Errors
-    class CustomError extends Error {
-      constructor(message) {
-        super(message);
-        this.name = "CustomError";
-      }
-    }
-
-    document.querySelector('#custom-error').addEventListener('click', function() {
-      try {
-        throw new CustomError("This is a custom error message.");
-      } catch (error) {
-        console.error("Caught an error: ", error);
-      } finally {
-        console.log("Custom error handling completed.");
-      }
-    });
-  </script>
-
-  <!-- Step 5 - Global Error Handling and 3rd Party Tracking -->
-                        
-  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
-  <script>
-    window.TrackJS && TrackJS.install({ 
-      token: "474e43ea5f5040dba7878a720a9c7aa9"
-    });
-
     window.onerror = function(message, source, lineno, colno, error) {
-      console.error("Global Error Caught: ", { message, source, lineno, colno, error });
-      return true;
+      if (window.TrackJS) {
+        // If TrackJS is available, log the error to TrackJS and prevent default handling
+        TrackJS.track(error);
+        return true;
+      } else {
+        // Log the error to the console if TrackJS is not available
+        console.error("Global Error Caught: ", { message, source, lineno, colno, error });
+        return true;
+      }
     };
 
     document.querySelector('#global-error').addEventListener('click', function() {
-      nonExistentFunction();
+      try {
+        nonExistentFunction();
+      } catch (error) {
+        console.error("Caught a global error:", error);
+      }
     });
   </script>
+
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({
+      token: "474e43ea5f5040dba7878a720a9c7aa9"
+    });
+  </script>
+
 </body>
 
 </html>
