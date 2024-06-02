@@ -83,7 +83,8 @@
       <button id="start-timer">Start Timer</button>
       <button id="end-timer">End Timer</button>
       <button id="console-trace">Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button id="custom-error">Custom Error</button>
+      <button id="global-error">Trigger a Global Error</button>
     </section>
   </main>
 
@@ -103,7 +104,7 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
-    //step 2
+    // Step 2 - Console Testing Buttons
     document.querySelector('#console-log').addEventListener('click', function() {
       console.log("Console Log Demo");
     });
@@ -176,8 +177,8 @@
     document.querySelector('#console-trace').addEventListener('click', function() {
       handleBtnClick();
     });
-    //step 3
-    //try/catch/finally/throw
+
+    // Step 3 - Try/Catch/Finally/Throw
     document.querySelector('#console-table').addEventListener('click', function() {
       try {
         let tableData = [
@@ -195,10 +196,42 @@
         console.log('Table data displayed');
       }
     });
-    
 
+    // Step 4 - Custom Errors
+    class CustomError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "CustomError";
+      }
+    }
 
-    
+    document.querySelector('#custom-error').addEventListener('click', function() {
+      try {
+        throw new CustomError("This is a custom error message.");
+      } catch (error) {
+        console.error("Caught an error: ", error);
+      } finally {
+        console.log("Custom error handling completed.");
+      }
+    });
+  </script>
+
+  <!-- Step 5 - Global Error Handling and 3rd Party Tracking -->
+                        
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "474e43ea5f5040dba7878a720a9c7aa9"
+    });
+
+    window.onerror = function(message, source, lineno, colno, error) {
+      console.error("Global Error Caught: ", { message, source, lineno, colno, error });
+      return true;
+    };
+
+    document.querySelector('#global-error').addEventListener('click', function() {
+      nonExistentFunction();
+    });
   </script>
 </body>
 
